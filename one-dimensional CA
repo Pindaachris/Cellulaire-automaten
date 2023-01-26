@@ -1,0 +1,66 @@
+import numpy as np
+import random
+
+#my attempt at a generic class
+class CellularAutomaton:
+    def __init__(self, cells, states, dimension, neighbours, rand):
+        self.cells = cells #aantal cellen in het rooster
+        self.states = states #number of states that a cell can have
+        self.dimension = dimension #dimension of the cellular automaton
+        self.neighbours= neighbours #number of neighbours each cell has
+        self.rand = rand #randvoorwaarden
+        
+#I really don't know how to have a generic way to evaluate the CA here
+#So I guess for now I'll just have specific methods in the subclasses
+
+class CA1D(CellularAutomaton):
+   
+    
+    # generates a 1D grid with random starting states
+    def random_firstgen(self):
+        grid= grid=np.empty(self.cells,int)
+        for i in range(self.cells):
+            grid[i]=random.choice(range(0,self.states))
+        return grid
+    
+    # creates a 1D grid with the middle cell(s) being alive, all others dead
+    #only works if there are only two states
+    def conventional_firstgen(self):
+        grid= grid=np.empty(self.cells,int)
+        for i in range(self.cells):
+            if self.cells%2==0: #if even
+                if i == self.cells//2 or i== self.cells//2+1:
+                    grid[i-1]=1
+                else:
+                    grid[i-1]=0
+            else:#if uneven
+                if i==self.cells//2:
+                    grid[i]=1
+                else:
+                    grid[i]=0
+        return grid
+    
+    #once it's finished this will deal with the values on the edge of the grid
+    def voorwaarden(self,grid,new): 
+        if self.rand == "static":
+            for i in range (self.cells):
+                if i==0 or i==self.cells-1:
+                    new[i]=grid[i]
+        elif self.rand == "periodic": # have to think about this
+            for i in range (self.cells):
+                pass
+        else:
+            return False #would be nice to have an error message here
+     
+    #this will count alive neighbours
+    #this only works if there are just 2 states
+    #once I have the voorwaarden function this will be implemented here
+    def alive_neighbours(self,grid,x):
+        neighbours=0
+        for i in range (x-self.neighbours//2,x+self.neighbours//2+1):
+            if i==x:
+                    pass
+            else:
+                neighbours+=grid[i]
+                
+        return neighbours
