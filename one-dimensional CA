@@ -14,7 +14,11 @@ class CellularAutomaton:
 #So I guess for now I'll just have specific methods in the subclasses
 
 class CA1D(CellularAutomaton):
-   
+   # where rules is the number of ruleset as a binary number as a string
+   def __init__(self,rules,cells, states, dimension, neighbours, rand):
+        self.rules = rules
+        self.dimension=1
+        super().__init__( cells, states, dimension, neighbours, rand)
     
     # generates a 1D grid with random starting states
     def random_firstgen(self):
@@ -55,6 +59,7 @@ class CA1D(CellularAutomaton):
     #this will count alive neighbours
     #this only works if there are just 2 states
     #once I have the voorwaarden function this will be implemented here
+    #actually nevermind this is so irrelevant for 1 dim CAs
     def alive_neighbours(self,grid,x):
         neighbours=0
         for i in range (x-self.neighbours//2,x+self.neighbours//2+1):
@@ -64,3 +69,46 @@ class CA1D(CellularAutomaton):
                 neighbours+=grid[i]
                 
         return neighbours
+        
+    #this will show me what kind of neighbourhood I have at point x    
+    def neighbourhood(self,grid,x):
+            if grid[x]==1:
+                if grid[x-1]==1 and grid[x+1]==1:
+                    return 0
+                elif grid[x-1]==1 and grid[x+1]==0:
+                    return 1 
+                elif grid[x-1]==0 and grid[x+1]==1:
+                    return 4
+                else:
+                    return 5
+            else:
+                if grid[x-1]==1 and grid[x+1]==1:
+                    return 2
+                elif grid[x-1]==1 and grid[x+1]==0:
+                    return 3
+                elif grid[x-1]== 0 and grid[x+1]==1:
+                    return 6
+                else:
+                    return 7
+    
+    #this will show me how my 1D, 2-state CA will behave given a specific ruleset
+    #grid is here either conventional_firstgen or random_firstgen
+    #still only works with static vaues at the edges though
+    def computation(self,grid,rounds):
+        print(grid)
+        new= grid.copy()
+        
+        if rounds==0:
+            print("done")
+        else:
+            for i in range(self.cells):
+                state= grid[i]
+               
+                if i==0 or i==self.cells-1:
+                     new[i]=state
+                else:
+                    neighbourhood=self.neighbourhood(grid,i)
+                    new[i]=int(self.rules[neighbourhood])
+                
+            print(new)
+            return self.computation(new,rounds-1)
