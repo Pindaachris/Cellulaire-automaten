@@ -8,14 +8,15 @@ Created on Sat Jan 28 13:35:44 2023
 import numpy as np
 import random
 import math
+from matplotlib import pyplot
 
-#my attempt at a generic class
+#a generic class for cellular automata
 class CellularAutomaton:
     def __init__(self, cells, states, dimension, neighbours, rand):
-        self.cells = cells #aantal cellen in het rooster
+        self.cells = cells #number of cells
         self.states = states #number of states that a cell can have
         self.dimension = dimension #dimension of the cellular automaton
-        self.neighbours= neighbours #number of neighbours each cell has
+        self.neighbours= neighbours #number of neighbours each cell has 
         self.rand = rand #randvoorwaarden
         
 #I really don't know how to have a generic way to evaluate the CA here
@@ -27,7 +28,11 @@ class CA1D(CellularAutomaton):
     def __init__(self,rules,cells, states, dimension, neighbours, rand):
         self.rules = rules
         self.dimension=1
-        super().__init__(cells, states,dimension, neighbours, rand)
+        super().__init__(cells, states,dimension, neighbours, rand
+#only two possible inputs voor rand: either "static" or "periodic"
+#static means first and last cell aways stay in the same state
+#periodic means that the last cel counts as neighbour of the first one and vice versa
+#for now only really works with two states and two neighbours
         
 
    
@@ -40,7 +45,6 @@ class CA1D(CellularAutomaton):
         return grid
     
     # creates a 1D grid with the middle cell(s) being alive, all others dead
-    #only works if there are only two states
     def conventional_firstgen(self):
         grid= grid=np.empty(self.cells,int)
         for i in range(self.cells):
@@ -57,10 +61,9 @@ class CA1D(CellularAutomaton):
         return grid
     
      
-    #this will count alive neighbours
-    #this only works if there are just 2 states
-    #actually nevermind this is so irrelevant for 1 dim CAs
-    #maybe we can do something with more than 2 states here
+    #this will give sum of states of neighbours
+    #for now no method that uses this
+    #but you could construct a method that uses these sums just then there would be more than 8 posible neighbourhoods
     def alive_neighbours(self,grid,x):
         neighbours=0
         for i in range (x-self.neighbours//2,x+self.neighbours//2+1):
@@ -71,10 +74,9 @@ class CA1D(CellularAutomaton):
                 
         return neighbours
     
+    #This shows us which of the 8 neighbourhoods x has based on the system of the rules for 1d automata
     def neighbourhood(self,grid,x):
-        if self.rand !="periodic" and self.rand != "static":
-            print ("randvoorwaarden not valid")
-        elif self.rand == "periodic":
+        if self.rand=="periodic":
             if x==0:
                 if grid[x]==1:
                     if grid[self.cells-1]==1 and grid[x+1]==1:
@@ -135,9 +137,13 @@ class CA1D(CellularAutomaton):
                         return 6
                     else:
                         return 7
+           
+                       
                 
             
-    
+    #applying the rules 
+    #this will run for as many times as you put as rouns
+    #if you want it to run indefinetely, put -1
     def evaluation(self,grid,rounds):
 
         new= grid.copy()
@@ -168,11 +174,11 @@ class CA1D(CellularAutomaton):
         
 class CA2D(CellularAutomaton):
     def __init__(self,die,born,cells, states, dimension, neighbours, rand):
-        self.die = die
-        self.born= born
+        self.die = die #should be a list with all possible counts of alive cells as neighbours with wich a live cell dies
+        self.born= born #should be a list with all possible counts of alive cells as neighbours with wich a dead cell becomes born
         self.dimension= 2
-        self.row = int(math.sqrt(cells))
-        self.col = int(math.sqrt(cells))
+        self.row = int(math.sqrt(cells)) #this means, that the grid will always be quadratic 
+        self.col = int(math.sqrt(cells)) #so gotta think of that when you input number of cells
         
         super().__init__(cells, states,dimension, neighbours, rand)
         
@@ -197,6 +203,7 @@ class CA2D(CellularAutomaton):
         return neighbours
     
     #visualizing it
+    #yellow is alive and purple is dead
     def graphic(self,grid):
         pyplot.figure(figsize=(5,5))
         pyplot.imshow(grid)
@@ -232,7 +239,7 @@ class CA2D(CellularAutomaton):
                                  
                    
                         
-            print(new)
+            print(new)#this can be deleted actualy was just for me to see it as numbers also
             self.graphic(new)
             return self.evaluation(new,rounds-1)
         
