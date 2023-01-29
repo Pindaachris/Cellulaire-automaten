@@ -162,7 +162,7 @@ class CA1D(CellularAutomaton):
                     
                     
             print(new)
-            return self.computation(new,rounds-1)
+            return self.evaluation(new,rounds-1)
         
         
         
@@ -195,6 +195,11 @@ class CA2D(CellularAutomaton):
                 else:
                     neighbours+=grid[i][j]
         return neighbours
+    
+    #visualizing it
+    def graphic(self,grid):
+        pyplot.figure(figsize=(5,5))
+        pyplot.imshow(grid)
 
     
     #implementing rules
@@ -228,6 +233,7 @@ class CA2D(CellularAutomaton):
                    
                         
             print(new)
+            self.graphic(new)
             return self.evaluation(new,rounds-1)
         
         
