@@ -37,23 +37,25 @@ class CA1D(CellularAutomaton):
 
    
     
-    # generates a 1D grid with random starting states
+    
     def random_firstgen(self):
+    """ generates a 1D grid with random starting states """
         grid= grid=np.empty(self.cells,int)
         for i in range(self.cells):
             grid[i]=random.choice(range(0,self.states))
         return grid
     
-    # creates a 1D grid with the middle cell(s) being alive, all others dead
+    
     def conventional_firstgen(self):
+    """creates a 1D grid with the middle cell(s) being alive, all others dead"""
         grid= grid=np.empty(self.cells,int)
         for i in range(self.cells):
-            if self.cells%2==0: #if even
+            if self.cells%2==0: #if even number of cells
                 if i == self.cells//2 or i== self.cells//2+1:
                     grid[i-1]=1
                 else:
                     grid[i-1]=0
-            else:#if uneven
+            else:#if uneven number of cells
                 if i==self.cells//2:
                     grid[i]=1
                 else:
@@ -61,10 +63,11 @@ class CA1D(CellularAutomaton):
         return grid
     
      
-    #this will give sum of states of neighbours
+    
     #for now no method that uses this
-    #but you could construct a method that uses these sums just then there would be more than 8 posible neighbourhoods
+    #but you could construct a method that uses these sums just then you'd have to change the evaluation method
     def alive_neighbours(self,grid,x):
+    """this will give sum of states of neighbours"""
         neighbours=0
         for i in range (x-self.neighbours//2,x+self.neighbours//2+1):
             if i==x:
@@ -74,8 +77,9 @@ class CA1D(CellularAutomaton):
                 
         return neighbours
     
-    #This shows us which of the 8 neighbourhoods x has based on the system of the rules for 1d automata
+    
     def neighbourhood(self,grid,x):
+    """This shows us which of the 8 neighbourhoods x has based on the system of the rules for 1d automata"""
         if self.rand=="periodic":
             if x==0:
                 if grid[x]==1:
@@ -141,11 +145,11 @@ class CA1D(CellularAutomaton):
                        
                 
             
-    #applying the rules 
-    #this will run for as many times as you put as rouns
-    #if you want it to run indefinetely, put -1
+   
     def evaluation(self,grid,rounds):
-
+    """ this function applies the rules on a grid and displays the new grid
+    
+    it will run as many times as you put rounds, if you want it to run indefinitely, put -1 for rounds"""
         new= grid.copy()
         
         if rounds==0:
@@ -182,8 +186,10 @@ class CA2D(CellularAutomaton):
         
         super().__init__(cells, states,dimension, neighbours, rand)
         
-    #creating a random starting grid
+    
     def first_gen(self): 
+    """creating a random starting grid"""
+                         
         grid = np.empty((self.row, self.col), int)
         for i in range (self.row):
             for j in range(self.col):
@@ -191,8 +197,9 @@ class CA2D(CellularAutomaton):
         return grid 
     
     
-    #counting how many neighbours are alive at position grid[x,y]  
+    
     def count_neighbours(self,grid,x,y):
+    """counting how many neighbours are alive at position grid[x,y]  """
         neighbours=0
         for i in range (x-1,x+2):
             for j in range(y-1,y+2):
@@ -202,16 +209,18 @@ class CA2D(CellularAutomaton):
                     neighbours+=grid[i][j]
         return neighbours
     
-    #visualizing it
-    #yellow is alive and purple is dead
+    
     def graphic(self,grid):
+    """visualizing it
+    yellow is alive and purple is dead """
         pyplot.figure(figsize=(5,5))
         pyplot.imshow(grid)
 
     
-    #implementing rules
+    
     def evaluation(self,grid,rounds):
-        #rounds= the amount of time you want it to evaluate
+        """implementing rules and showing the new grid
+        rounds is the amount of timesteps you want it to evaluate, again put -1 as rounds for indefinite evaluation"""
         new= grid.copy()
         
         if rounds==0:
