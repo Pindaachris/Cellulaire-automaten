@@ -10,8 +10,9 @@ import random
 import math
 from matplotlib import pyplot
 
-#a generic class for cellular automata
+
 class CellularAutomaton:
+    """a generic class for cellular automata"""
     def __init__(self, cells, states, dimension, neighbours, rand):
         self.cells = cells #number of cells
         self.states = states #number of states that a cell can have
@@ -26,7 +27,8 @@ class CellularAutomaton:
 class CA1D(CellularAutomaton):
     """ a class for 1 dimensional cellular automata"""
     def __init__(self,rules,cells, states, dimension, neighbours, rand):
-        self.rules = rules
+        self.rules = rules #number of the applied ruleset as binary number with 8 digits 
+        # super important that the binary number has 8 digits! Otherwise it does not work
         self.dimension=1
         super().__init__(cells, states,dimension, neighbours, rand
 #only two possible inputs voor rand: either "static" or "periodic"
