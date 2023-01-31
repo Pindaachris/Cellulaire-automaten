@@ -24,7 +24,7 @@ class CellularAutomaton:
         
 
 class CA1D(CellularAutomaton):
-""" a class for 1 dimensional cellular automata"""
+    """ a class for 1 dimensional cellular automata"""
     def __init__(self,rules,cells, states, dimension, neighbours, rand):
         self.rules = rules
         self.dimension=1
