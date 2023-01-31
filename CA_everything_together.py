@@ -19,12 +19,12 @@ class CellularAutomaton:
         self.neighbours= neighbours #number of neighbours each cell has 
         self.rand = rand #randvoorwaarden
         
-#I really don't know how to have a generic way to evaluate the CA here
-#So I guess for now I'll just have specific methods in the subclasses
+
 
         
 
 class CA1D(CellularAutomaton):
+""" a class for 1 dimensional cellular automata"""
     def __init__(self,rules,cells, states, dimension, neighbours, rand):
         self.rules = rules
         self.dimension=1
@@ -177,12 +177,13 @@ class CA1D(CellularAutomaton):
         
         
 class CA2D(CellularAutomaton):
+""" a class for 2 dimensional Cellular Automata"""
     def __init__(self,die,born,cells, states, dimension, neighbours, rand):
         self.die = die #should be a list with all possible counts of alive cells as neighbours with wich a live cell dies
         self.born= born #should be a list with all possible counts of alive cells as neighbours with wich a dead cell becomes born
         self.dimension= 2
         self.row = int(math.sqrt(cells)) #this means, that the grid will always be quadratic 
-        self.col = int(math.sqrt(cells)) #so gotta think of that when you input number of cells
+        self.col = int(math.sqrt(cells))
         
         super().__init__(cells, states,dimension, neighbours, rand)
         
